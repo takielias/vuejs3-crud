@@ -32,7 +32,7 @@
   } from 'vue'
 
   export default defineComponent({
-    name: 'Welcome',
+    name: 'Home',
     props: {
       msg: {
         type: String,

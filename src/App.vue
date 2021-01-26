@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Welcome from './components/welcome.vue'
+import Welcome from './components/Welcome.vue'
 
 export default defineComponent({
   name: 'App',

@@ -1,8 +1,10 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Home from "./../components/home.vue";
+import Home from "./../components/Home.vue";
 import Signin from "../components/SignIn.vue";
 import Signup from "../components/SignUp.vue";
-import NotFound from "./../components/NotFound.vue";
+import NotFound from "./../components/errors/NotFound.vue";
+
+import AddProduct from "../components/product/Add.vue";
 
 const routes = [
   {
@@ -16,9 +18,14 @@ const routes = [
     component: Signin,
   },
   {
-    path: "/signus",
+    path: "/signup",
     name: "Signup",
     component: Signup,
+  },
+  {
+    path: "/add-product",
+    name: "Addproduct",
+    component: AddProduct,
   },
   {
     path: "/:catchAll(.*)",
