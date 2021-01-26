@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth, AUTH_TOKEN } from './auth'
 
+import notificationService from '../notificationService'
 
 export const useApiWithAuth = (endpoint: string) => {
   const { user } = useAuth()
@@ -25,14 +26,17 @@ export const useApi = (endpoint: string, access_token?: string) => {
 
   const post = (payload?: Record<string, any>) => {
     loading.value = true
-    error.value = undefined
+    // error.value = undefined
 
     return api.post(endpoint, payload)
-      .then(res => data.value = res.data)
+      .then(res => {
+        data.value = res.data 
+        notificationService.notify({type:'success', title:'Success', message:data.value.data.msg})   
+      })
       .catch(e => {
-        console.log('Mykopa', e.response.data)
-        error.value = e
-        throw e
+        // console.log('Mykopa', e.response)
+        error.value = e.response
+        // throw e
       })
       .finally(() => loading.value = false)
   }
@@ -52,8 +56,7 @@ export const useApi = (endpoint: string, access_token?: string) => {
     return api.get(endpoint + queryString, config)
       .then(res => data.value = res.data)
       .catch(e => {
-        error.value = e
-
+        error.value = e.response
         throw e
       })
       .finally(() => loading.value = false)
@@ -74,21 +77,21 @@ export const useApi = (endpoint: string, access_token?: string) => {
   }
 
   const errorMessage = computed(() => {
-    console.log('?? compute', error.value);
+    // console.log('?? compute', error.value);
     if (error.value) {
-      return error.value.response.data.data.messages
+      return error.value.data.data.messages
     }
   })
 
   const errorDetails = computed(() => {
-    if ( error.value && error.value.response.data.data.messages ) {
-      return error.value.response.data.data.messages
+    if ( error.value && error.value.data.data.messages ) {
+      return error.value.data.data.messages
     }
   })
 
   const errorFields = computed(() => {
-    if (error.value && Array.isArray(error.value.response.data.data.messages)) {
-      return (error.value.response.data.data.messages as string[]).reduce((acc: Record<string, any>, msg: string) => {
+    if (error.value && Array.isArray(error.value.data.data.messages)) {
+      return (error.value.data.data.messages as string[]).reduce((acc: Record<string, any>, msg: string) => {
         let [ field ] = msg.split(' ')
         // TODO: Maximal...
         if (!acc[field]) {
@@ -110,7 +113,7 @@ export const useApi = (endpoint: string, access_token?: string) => {
 
   watch([ error ], () => {
     // If 401 Unauthorised, force user to signin
-    if ( error.value.response.status === 401 && router ) {
+    if ( error.value.status === 401 && router ) {
       router.push('/signin')
     }
   })

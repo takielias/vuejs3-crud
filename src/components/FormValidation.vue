@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mb-12 text-red-100 py-2 pl-4 border-l-4 border-red-600 rounded-sm bg-red-500"
+    class="mb-12 text-red-100 py-2 pl-4 border-l-4 border-purple-300 rounded-sm bg-red-500"
     v-if="errorMessage"
   >
     <ul v-if="errorDetails">
@@ -11,6 +11,7 @@
         v-html="error"
       />
     </ul>
+
   </div>
 </template>
 

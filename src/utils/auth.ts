@@ -30,7 +30,7 @@ const token = window.localStorage.getItem(AUTH_KEY)
 
 if ( token ) {
 
-    const { loading, error, data, get } = useApi('/auth/user')
+    const { loading, error, data, get } = useApi('/api/v1/signin')
 
     state.authenticating = true
 

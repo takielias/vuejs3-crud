@@ -3,13 +3,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+
 import Welcome from './components/Welcome.vue'
+
+import { defineComponent, watch } from "vue";
+import { useAuth } from "./utils/auth";
+import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
   name: 'App',
-  components: {
-    Welcome
-  }
+  components: { Welcome },
+  props:['msg']
 })
 </script>
