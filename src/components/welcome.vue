@@ -3,6 +3,7 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <div class="relative bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
     <div class="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
       <div class="flex justify-start lg:w-0 lg:flex-1">
         <a href="/">
@@ -28,13 +29,18 @@
         </a>
       </div>
 
+   
     </div>
 
-          <router-view />
+<div class="flex flex-col">
+  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+     <router-view />
+     </div>
+     </div>
+     </div>
 
   </div>
-
-
 
 </div>
 
