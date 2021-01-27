@@ -6,10 +6,10 @@
 
       <div class="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
         <div class="flex justify-start lg:w-0 lg:flex-1">
-          <a href="/">
-            <span class="sr-only">vuejs 3</span>
+          <router-link :to="{ name: 'Home' }">
+                        <span class="sr-only">vuejs 3</span>
             <img class="h-8 w-auto sm:h-10" src="../assets/shop.svg" alt="">
-          </a>
+            </router-link>
         </div>
         <div class="-mr-2 -my-2 md:hidden">
           <button type="button"
@@ -24,7 +24,7 @@
         </div>
         <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
           <a href="#" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-            <router-link to="/add-product">Add Product</router-link>
+            <router-link to="/product-list">Product List</router-link>
           </a>
           <a v-if="!loggedin" href="#" class="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
             <router-link to="/signin">Sign In</router-link>
@@ -70,15 +70,12 @@ import { useAuth } from "../utils/auth";
     name: 'Welcome',
     setup() {
     const { user } = useAuth();
-
     const loggedin = computed(() => {
       return user?.value && user.value.id
         ? true
         : false;
     });
-
     return { user, loggedin};
-
   },
   })
 </script>

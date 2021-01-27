@@ -15,7 +15,6 @@ export const useApi = (endpoint: string, access_token?: string) => {
   const api = axios.create({
     baseURL: process.env.VUE_APP_API || 'http://localhost:8000/',
     headers: {
-      Accept: 'application/json',
       Authorization: access_token ? `Bearer ${access_token}` : undefined,
     }
   })
@@ -43,7 +42,7 @@ export const useApi = (endpoint: string, access_token?: string) => {
 
   const get = (query?: Record<string, any>, config?: AxiosRequestConfig) => {
     loading.value = true
-    error.value = undefined
+    // error.value = undefined
 
     let queryString = ''
 
@@ -54,10 +53,11 @@ export const useApi = (endpoint: string, access_token?: string) => {
     }
 
     return api.get(endpoint + queryString, config)
-      .then(res => data.value = res.data)
+      .then(res => {
+        data.value = res.data
+      })
       .catch(e => {
         error.value = e.response
-        throw e
       })
       .finally(() => loading.value = false)
   }
@@ -114,6 +114,7 @@ export const useApi = (endpoint: string, access_token?: string) => {
   watch([ error ], () => {
     // If 401 Unauthorised, force user to signin
     if ( error.value.status === 401 && router ) {
+      notificationService.notify({type:'error', title:'Error', message:'Please Sign In'})   
       router.push('/signin')
     }
   })

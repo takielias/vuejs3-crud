@@ -1,33 +1,24 @@
-import http from "./../utils/api";
+// import api from './api'
+import { computed, inject, reactive, toRefs, watch } from 'vue'
+import {
+  useApi
+} from "../utils/api";
 
-class ProductDataService {
-  getAll() {
-    return http.get("/products");
-  }
-
-  get(id: string) {
-    return http.get(`/products/${id}`);
-  }
-
-  create(data: any) {
-    return http.post("/products", data);
-  }
-
-  update(id: string, data: any) {
-    return http.put(`/products/${id}`, data);
-  }
-
-  delete(id: string) {
-    return http.delete(`/products/${id}`);
-  }
-
-  deleteAll() {
-    return http.delete(`/products`);
-  }
-
-  findByTitle(title: string) {
-    return http.get(`/products?title=${title}`);
-  }
+interface Product {
+  title ? : string;
+  description ? : string;
+  price ? : string;
+  image ? : string;
 }
 
-export default new ProductDataService();
+export const useAuth = () => {
+    const setProduct = (payload: Product): void => {
+
+
+    }
+
+    return {
+      setProduct,
+    }
+
+}

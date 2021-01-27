@@ -1,10 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Home from "../components/Home.vue";
-import Signin from "../components/SignIn.vue";
-import Signup from "../components/SignUp.vue";
+
 import NotFound from "./../components/errors/NotFound.vue";
 
-import AddProduct from "../components/product/Add.vue";
+import notificationService from '../notificationService'
 
 import { useAuth } from '../utils/auth'
 
@@ -12,30 +10,37 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: () => import(/* webpackChunkName: "signout" */ '../components/Home.vue'),
+    meta: { requiresAuth: false },
   },
   {
     path: "/signin",
     name: "Signin",
-    component: Signin,
+    component: () => import(/* webpackChunkName: "signout" */ '../components/Signin.vue'),
     meta: { requiresAuth: false },
   },
   {
     path: "/signup",
     name: "Signup",
-    component: Signup,
+    component: () => import(/* webpackChunkName: "signout" */ '../components/Signup.vue'),
     meta: { requiresAuth: false },
   },
   {
     path: '/signout',
     name: 'signout',
-    component: () => import(/* webpackChunkName: "logout" */ '../components/Signout.vue'),
+    component: () => import(/* webpackChunkName: "signout" */ '../components/Signout.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: "/add-product",
     name: "Addproduct",
-    component: AddProduct,
+    component: () => import(/* webpackChunkName: "signout" */ '../components/product/Add.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/product-list",
+    name: "ProductList",
+    component: () => import(/* webpackChunkName: "signout" */ '../components/product/List.vue'),
     meta: { requiresAuth: true },
   },
   {
@@ -52,10 +57,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const { authenticating, user } = useAuth()
 
-
   // Not logged into a guarded route?
   if ( authenticating.value === false && to.meta.requiresAuth === true && !user?.value ) {
     console.log('requires auth, redirect to login');
+    notificationService.notify({type:'error', title:'Error', message:'Please Sign In'})   
     next({ name: 'Signin' })
   }
 

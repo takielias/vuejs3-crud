@@ -21,21 +21,17 @@
       <div>
         <img class="mx-auto h-12 w-auto" src="../../assets/product.svg" alt="Workflow">
       </div>
-      <form action="#" method="POST">
+      <form @submit.prevent="addProduct" enctype="multipart/form-data">
+
+       <FormValidation v-if="errorMessage" :errorMessage="errorMessage" :errorDetails="errorDetails" />
+
         <div class="shadow sm:rounded-md sm:overflow-hidden">
 
           <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
 
             <div class="col-span-6 sm:col-span-4">
               <label for="email_address" class="block text-sm font-medium text-gray-700">Title</label>
-              <input type="text" name="title" id="product_title"
-                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-            </div>
-
-
-            <div class="col-span-6 sm:col-span-4">
-              <label for="email_address" class="block text-sm font-medium text-gray-700">Name</label>
-              <input type="text" name="name" id="product_name"
+              <input type="text" v-model="title" id="product_title"
                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
             </div>
 
@@ -48,7 +44,7 @@
                     ৳
                   </span>
                 </div>
-                <input type="text" name="price" id="price"
+                <input type="text" v-model="price" id="price"
                   class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
                   placeholder="0.00">
                 <div class="absolute inset-y-0 right-0 flex items-center">
@@ -68,7 +64,7 @@
               </label>
 
               <div class="mt-1">
-                <textarea id="about" name="about" rows="3"
+                <textarea id="about" name="about" rows="3" v-model="description"
                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
                   placeholder="Product Description"></textarea>
               </div>
@@ -93,7 +89,7 @@
                     <label for="file-upload"
                       class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                       <span>Upload a file</span>
-                      <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                      <input id="file-upload" name="file-upload" @change="onImageChange"  type="file" class="sr-only">
                     </label>
                     <p class="pl-1">or drag and drop</p>
                   </div>
@@ -120,9 +116,91 @@
 
 <script lang="ts">
   import {
+    toRefs,
+    reactive,
     defineComponent
   } from 'vue'
+
+  import {
+    useApiWithAuth
+  } from "../../utils/api";
+
+import { useRouter } from "vue-router"
+
+  // @ts-ignore
+  import FormValidation from './../FormValidation.vue'
+
+  interface AddProductPayload {
+    title ? : string;
+    description ? : string;
+    price ? : string;
+    image ? : any;
+  }
+
   export default defineComponent({
-    name: 'AddProduct'
+    name: 'AddProduct',
+    components: {
+      FormValidation,
+    },
+    setup() {
+
+      let image:any;
+
+      const payload = reactive < AddProductPayload > ({
+        title: undefined,
+        description: undefined,
+        price: undefined,
+        image: undefined,
+      });
+
+      const {
+        error,
+        loading,
+        post,
+        data,
+        errorMessage,
+        errorDetails,
+        errorFields,
+        computedClasses,
+      } = useApiWithAuth("/api/v1/products");
+
+      const router = useRouter()
+
+      const addProduct = () => {
+        console.log(payload);
+        post(payload).then(() => {
+            router.push({
+              name: "ProductList"
+            });
+        });
+      };
+
+      const onImageChange = (e: any) => {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length)
+          return;
+        createImage(files[0]);
+      };
+
+      const createImage = (file: any) => {
+        let reader = new FileReader();
+        reader.onload = (e: any) => {
+          payload['image'] = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      };
+
+      return {
+         ...toRefs(payload),
+        addProduct,
+        loading,
+        errorMessage,
+        errorFields,
+        errorDetails,
+        computedClasses,
+        onImageChange
+      };
+
+    }
   })
 </script>
