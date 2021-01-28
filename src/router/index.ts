@@ -2,9 +2,9 @@ import { createWebHistory, createRouter } from "vue-router";
 
 import NotFound from "./../components/errors/NotFound.vue";
 
-import notificationService from '../notificationService'
-
 import { useAuth } from '../utils/auth'
+
+import { useToast } from "vue-toastification";
 
 const routes = [
   {
@@ -43,6 +43,13 @@ const routes = [
     component: () => import(/* webpackChunkName: "signout" */ '../components/product/List.vue'),
     meta: { requiresAuth: true },
   },
+
+  {
+    path: '/product/:id',
+    name: 'product.view',
+    component: () => import(/* webpackChunkName: "genres.view" */ '../components/product/Edit.vue'),
+    meta: { requiresAuth: true },
+  },
   {
     path: "/:catchAll(.*)",
     component: NotFound,
@@ -60,7 +67,8 @@ router.beforeEach((to, from, next) => {
   // Not logged into a guarded route?
   if ( authenticating.value === false && to.meta.requiresAuth === true && !user?.value ) {
     console.log('requires auth, redirect to login');
-    notificationService.notify({type:'error', title:'Error', message:'Please Sign In'})   
+    const toast = useToast();
+    toast.error('Please Sign In')
     next({ name: 'Signin' })
   }
 

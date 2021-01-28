@@ -1,5 +1,7 @@
 <template>
 
+  <loading v-if="authenticating" />
+  
   <!-- This example requires Tailwind CSS v2.0+ -->
   <div class="relative bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">

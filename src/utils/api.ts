@@ -2,8 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth, AUTH_TOKEN } from './auth'
-
-import notificationService from '../notificationService'
+import { useToast } from "vue-toastification";
 
 export const useApiWithAuth = (endpoint: string) => {
   const { user } = useAuth()
@@ -28,14 +27,10 @@ export const useApi = (endpoint: string, access_token?: string) => {
     // error.value = undefined
 
     return api.post(endpoint, payload)
-      .then(res => {
-        data.value = res.data 
-        notificationService.notify({type:'success', title:'Success', message:data.value.data.msg})   
-      })
+      .then(res => data.value = res.data)
       .catch(e => {
-        // console.log('Mykopa', e.response)
         error.value = e.response
-        // throw e
+        throw e
       })
       .finally(() => loading.value = false)
   }
@@ -53,11 +48,10 @@ export const useApi = (endpoint: string, access_token?: string) => {
     }
 
     return api.get(endpoint + queryString, config)
-      .then(res => {
-        data.value = res.data
-      })
+      .then(res => data.value = res.data)
       .catch(e => {
         error.value = e.response
+        throw e
       })
       .finally(() => loading.value = false)
   }
@@ -65,12 +59,12 @@ export const useApi = (endpoint: string, access_token?: string) => {
   // @ts-ignore
   const del = () => {
     loading.value = true
-    error.value = undefined
+    // error.value = undefined
 
     return api.delete(endpoint)
       .then(res => data.value = res.data)
       .catch(e => {
-        error.value = e
+        error.value = e.response
         throw e
       })
       .finally(() => loading.value = false)
@@ -114,7 +108,8 @@ export const useApi = (endpoint: string, access_token?: string) => {
   watch([ error ], () => {
     // If 401 Unauthorised, force user to signin
     if ( error.value.status === 401 && router ) {
-      notificationService.notify({type:'error', title:'Error', message:'Please Sign In'})   
+      const toast = useToast();
+      toast.error('Please Sign In')
       router.push('/signin')
     }
   })

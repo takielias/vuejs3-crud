@@ -15,5 +15,5 @@
       ]
     },
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/components/home.vue", "src/components/SignIn.vue", "src/components/SignUp.vue", "src/components/signin.vue", "src/components/Home.vue", "src/components/Home.vue"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/components/home.vue", "src/components/SignIn.vue", "src/components/SignUp.vue", "src/components/signin.vue", "src/components/Home.vue", "src/components/Home.vue", "src/components/product/Edit.vue"]
 }

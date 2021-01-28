@@ -1,14 +1,5 @@
 <template>
 
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <div>
-        <img class="mx-auto h-12 w-auto" src="../../assets/product.svg" alt="Workflow">
-      </div>
-      <form @submit.prevent="addProduct" enctype="multipart/form-data">
-
-        <FormValidation v-if="errorMessage" :errorMessage="errorMessage" :errorDetails="errorDetails" />
-
         <div class="shadow sm:rounded-md sm:overflow-hidden">
 
           <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
@@ -84,6 +75,8 @@
               </div>
             </div>
 
+{{data}}
+
           </div>
           <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
             <button type="submit"
@@ -92,104 +85,5 @@
             </button>
           </div>
         </div>
-      </form>
-    </div>
-  </div>
 
 </template>
-
-<script lang="ts">
-  import {
-    toRefs,
-    reactive,
-    defineComponent
-  } from 'vue'
-
-  import {
-    useApiWithAuth
-  } from "../../utils/api";
-
-  import {
-    useRouter
-  } from "vue-router"
-
-  // @ts-ignore
-  import FormValidation from './../FormValidation.vue'
-
-  import {
-    ProductPayload
-  } from '@/interfaces/interfaces';
-
-  import { useToast } from "vue-toastification";
-
-  export default defineComponent({
-    name: 'AddProduct',
-    components: {
-      FormValidation,
-    },
-
-    setup() {
-
-     const toast = useToast();
-
-      let image: any;
-
-      const payload = reactive < ProductPayload > ({
-        title: "",
-        description: "",
-        price: "",
-        image: undefined,
-      });
-
-      const {
-        error,
-        loading,
-        post,
-        errorMessage,
-        errorDetails,
-        errorFields,
-        computedClasses,
-      } = useApiWithAuth("/api/v1/products");
-
-      const router = useRouter()
-
-      const addProduct = () => {
-        console.log(payload);
-        post(payload).then((res) => {
-          console.log(res)
-           toast.success(res.msg);
-          router.push({
-            name: "ProductList"
-          });
-        });
-      };
-
-      const onImageChange = (e: any) => {
-        let files = e.target.files || e.dataTransfer.files;
-        if (!files.length)
-          return;
-        createImage(files[0]);
-      };
-
-      const createImage = (file: any) => {
-        let reader = new FileReader();
-        reader.onload = (e: any) => {
-          payload['image'] = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      };
-
-      return {
-        ...toRefs(payload),
-        addProduct,
-        loading,
-        errorMessage,
-        errorFields,
-        errorDetails,
-        computedClasses,
-        onImageChange
-      };
-
-    }
-  })
-</script>

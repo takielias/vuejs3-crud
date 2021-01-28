@@ -5,7 +5,7 @@
       <div>
         <img class="mx-auto h-12 w-auto" src="../../assets/product.svg" alt="Workflow">
       </div>
-      <form @submit.prevent="addProduct" enctype="multipart/form-data">
+      <form @submit.prevent="editProduct" enctype="multipart/form-data">
 
         <FormValidation v-if="errorMessage" :errorMessage="errorMessage" :errorDetails="errorDetails" />
 
@@ -83,7 +83,6 @@
                 </div>
               </div>
             </div>
-
           </div>
           <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
             <button type="submit"
@@ -100,9 +99,10 @@
 
 <script lang="ts">
   import {
-    toRefs,
+    defineComponent,
     reactive,
-    defineComponent
+    onMounted,
+    toRefs
   } from 'vue'
 
   import {
@@ -110,7 +110,7 @@
   } from "../../utils/api";
 
   import {
-    useRouter
+    useRoute,
   } from "vue-router"
 
   // @ts-ignore
@@ -120,74 +120,47 @@
     ProductPayload
   } from '@/interfaces/interfaces';
 
-  import { useToast } from "vue-toastification";
-
   export default defineComponent({
-    name: 'AddProduct',
     components: {
       FormValidation,
     },
 
     setup() {
 
-     const toast = useToast();
-
-      let image: any;
-
       const payload = reactive < ProductPayload > ({
         title: "",
         description: "",
         price: "",
-        image: undefined,
+        image: "",
       });
 
+      const route = useRoute()
+
+      const id = route.params.id;
+
       const {
-        error,
         loading,
-        post,
-        errorMessage,
-        errorDetails,
-        errorFields,
-        computedClasses,
-      } = useApiWithAuth("/api/v1/products");
+        data,
+        get
+      } = useApiWithAuth(`/api/v1/products/${id}`);
 
-      const router = useRouter()
+      onMounted(async () => {
+        get().then(res => {
+          console.log(res);
+          payload.title = res.title
+          payload.description = res.description
+          payload.image = res.image
+          payload.price = res.price
+        })
 
-      const addProduct = () => {
-        console.log(payload);
-        post(payload).then((res) => {
-          console.log(res)
-           toast.success(res.msg);
-          router.push({
-            name: "ProductList"
-          });
-        });
-      };
-
-      const onImageChange = (e: any) => {
-        let files = e.target.files || e.dataTransfer.files;
-        if (!files.length)
-          return;
-        createImage(files[0]);
-      };
-
-      const createImage = (file: any) => {
-        let reader = new FileReader();
-        reader.onload = (e: any) => {
-          payload['image'] = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      };
+      });
 
       return {
         ...toRefs(payload),
-        addProduct,
         loading,
-        errorMessage,
-        errorFields,
-        errorDetails,
-        computedClasses,
-        onImageChange
+        id,
+        data,
+        payload
       };
 
     }

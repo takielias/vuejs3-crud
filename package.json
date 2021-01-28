@@ -10,7 +10,8 @@
     "mini-toastr": "^0.8.1",
     "vue": "^3.0.5",
     "vue-router": "^4.0.3",
-    "vue-tailwind": "^2.0.0"
+    "vue-tailwind": "^2.0.0",
+    "vue-toastification": "^2.0.0-rc.1"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.2.1",

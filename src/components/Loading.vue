@@ -1,6 +1,6 @@
 <template>
-  <div class="loading fixed inset-0 bg-gray-900 bg-opacity-50 z-20 flex flex-col justify-center">
-    <div class="spinner m-auto ease-linear rounded-full border-8 border-t-8 border-gray-800 h-24 w-24">
+  <div class="loading fixed inset-0 bg-gray-300 bg-opacity-50 z-20 flex flex-col justify-center">
+    <div class="spinner m-auto ease-linear rounded-full border-8 border-t-8 border-gray-300 h-24 w-24">
        <span class="sr-only" v-html="message" />
     </div>
   </div>
@@ -22,7 +22,7 @@ export default defineComponent({
 
 <style>
 .loading .spinner {
-  border-top-color: theme('colors.red.700');
+  border-top-color: theme('colors.red.400');
 }
 
 .loading .spinner {

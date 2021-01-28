@@ -13,6 +13,6 @@ import { useRoute, useRouter } from "vue-router";
 export default defineComponent({
   name: 'App',
   components: { Welcome },
-  props:['msg']
+  props:['msg'],
 })
 </script>
