@@ -1,0 +1,1 @@
+import{d as s,k as n,l as a,b as e,e as o,o as t,c as r}from"./index.40d429b7.js";var d=s({setup(){const s=n(),{loading:t,get:r}=a("/api/v1/signout");r().then((n=>{s.success(n.msg)}));const{logout:d}=e(),i=o();return d().then((()=>i.push({name:"Home"}))),{loading:t}}});const i={class:"loading"};d.render=function(s,n,a,e,o,d){return t(),r("div",i)};export default d;
