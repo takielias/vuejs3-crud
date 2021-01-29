@@ -10,44 +10,44 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import(/* webpackChunkName: "signout" */ '../components/Home.vue'),
+    component: () => import(/* webpackChunkName: "signout" */ './../components/Home.vue'),
     meta: { requiresAuth: false },
   },
   {
     path: "/signin",
     name: "Signin",
-    component: () => import(/* webpackChunkName: "signout" */ '../components/Signin.vue'),
+    component: () => import(/* webpackChunkName: "signout" */ './../components/Signin.vue'),
     meta: { requiresAuth: false },
   },
   {
     path: "/signup",
     name: "Signup",
-    component: () => import(/* webpackChunkName: "signout" */ '../components/Signup.vue'),
+    component: () => import(/* webpackChunkName: "signout" */ './../components/Signup.vue'),
     meta: { requiresAuth: false },
   },
   {
     path: '/signout',
     name: 'signout',
-    component: () => import(/* webpackChunkName: "signout" */ '../components/SignOut.vue'),
+    component: () => import(/* webpackChunkName: "signout" */ './../components/SignOut.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: "/add-product",
     name: "Addproduct",
-    component: () => import(/* webpackChunkName: "signout" */ '../components/product/Add.vue'),
+    component: () => import(/* webpackChunkName: "signout" */ './../components/product/Add.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: "/product-list",
     name: "ProductList",
-    component: () => import(/* webpackChunkName: "signout" */ '../components/product/List.vue'),
+    component: () => import(/* webpackChunkName: "signout" */ './../components/product/List.vue'),
     meta: { requiresAuth: true },
   },
 
   {
     path: '/product/:id',
     name: 'product.view',
-    component: () => import(/* webpackChunkName: "genres.view" */ '../components/product/Edit.vue'),
+    component: () => import(/* webpackChunkName: "genres.view" */ './../components/product/Edit.vue'),
     meta: { requiresAuth: true },
   },
   {
