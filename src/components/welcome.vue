@@ -66,7 +66,6 @@
   } from "../utils/auth";
 
   export default defineComponent({
-    name: 'Welcome',
     setup() {
     const { user } = useAuth();
     const loggedin = computed(() => {
