@@ -115,7 +115,7 @@
             setUser(res, payload.rememberMe);
             toast.success(res.msg);
             router.push({
-              name: "Home"
+              name: "ProductList"
             });
           }
         });
