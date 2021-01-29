@@ -5,9 +5,11 @@
       <div>
         <img class="mx-auto h-12 w-auto" src="../../assets/product.svg" alt="Workflow">
       </div>
-      <form @submit.prevent="editProduct" enctype="multipart/form-data">
+      <form @submit.prevent="updateProduct" enctype="multipart/form-data">
 
         <FormValidation v-if="errorMessage" :errorMessage="errorMessage" :errorDetails="errorDetails" />
+
+        <input value="{{id}}" type="hidden">
 
         <div class="shadow sm:rounded-md sm:overflow-hidden">
 
@@ -57,6 +59,16 @@
               </p>
             </div>
 
+
+            <div class="flex my-10" v-if="image">
+              <div
+                class="bg-white w-full m-auto border-1  border-dashed border-gray-100 shadow-md rounded-lg overflow-hidden">
+                <img :src="image" alt="" class="w-full object-cover object-center" />
+                <div class="p-4">
+                </div>
+              </div>
+            </div>
+
             <div>
               <label class="block text-sm font-medium text-gray-700">
                 Product photo
@@ -73,7 +85,7 @@
                     <label for="file-upload"
                       class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                       <span>Upload a file</span>
-                      <input id="file-upload" name="file-upload" @change="onImageChange" type="file" class="sr-only">
+                      <input id="file-upload" name="file-upload" @change="onImageChange" accept="image/*" type="file" class="sr-only">
                     </label>
                     <p class="pl-1">or drag and drop</p>
                   </div>
@@ -110,7 +122,7 @@
   } from "../../utils/api";
 
   import {
-    useRoute,
+    useRoute, useRouter
   } from "vue-router"
 
   // @ts-ignore
@@ -120,6 +132,10 @@
     ProductPayload
   } from '@/interfaces/interfaces';
 
+  import {
+    useToast
+  } from "vue-toastification";
+
   export default defineComponent({
     components: {
       FormValidation,
@@ -127,12 +143,17 @@
 
     setup() {
 
+      const toast = useToast();
+
       const payload = reactive < ProductPayload > ({
+        id: undefined,
         title: "",
         description: "",
         price: "",
-        image: "",
+        image: false,
       });
+
+      const router = useRouter()
 
       const route = useRoute()
 
@@ -144,23 +165,61 @@
         get
       } = useApiWithAuth(`/api/v1/products/${id}`);
 
+      const {
+        put,
+        errorMessage,
+        errorDetails,
+        errorFields,
+      } = useApiWithAuth(`/api/v1/products/${id}`);
+
+      const updateProduct = () => {
+        payload.id = id
+        put(payload)
+          .then(res => {
+            toast.success(res.msg)
+            router.push({
+            name: "ProductList"
+          });
+          })
+      }
+
+
+      const onImageChange = (e: any) => {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length)
+          return;
+        payload.image = files[0]
+        createImage(files[0]);
+      };
+
+      const createImage = (file: any) => {
+        let reader = new FileReader();
+        reader.onload = (e: any) => {
+          payload['image'] = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      };
+
       onMounted(async () => {
         get().then(res => {
-          console.log(res);
+          // console.log(res);
           payload.title = res.title
           payload.description = res.description
           payload.image = res.image
           payload.price = res.price
         })
-
       });
 
       return {
         ...toRefs(payload),
         loading,
+        errorMessage,
+        errorFields,
+        errorDetails,
         id,
         data,
-        payload
+        onImageChange,
+        updateProduct,
       };
 
     }

@@ -1,7 +1,7 @@
 <template>
 
   <loading v-if="authenticating" />
-  
+
   <!-- This example requires Tailwind CSS v2.0+ -->
   <div class="relative bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
@@ -9,9 +9,9 @@
       <div class="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
         <div class="flex justify-start lg:w-0 lg:flex-1">
           <router-link :to="{ name: 'Home' }">
-                        <span class="sr-only">vuejs 3</span>
+            <span class="sr-only">vuejs 3</span>
             <img class="h-8 w-auto sm:h-10" src="../assets/shop.svg" alt="">
-            </router-link>
+          </router-link>
         </div>
         <div class="-mr-2 -my-2 md:hidden">
           <button type="button"
@@ -25,21 +25,17 @@
           </button>
         </div>
         <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-          <a href="#" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-            <router-link to="/product-list">Product List</router-link>
-          </a>
-          <a v-if="!loggedin" href="#" class="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-            <router-link to="/signin">Sign In</router-link>
-          </a>
-          <a v-if="!loggedin" href="#"
-            class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-            <router-link to="/signup">Sign up</router-link>
-          </a>
 
-         <a v-if="loggedin" href="#"
-            class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-            <router-link to="/signout">Sign Out</router-link>
-          </a>
+         <router-link class="inline-block px-6 py-2 text-xs font-medium leading-6 text-center text-white uppercase transition bg-red-500 rounded shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none" to="/product-list">Product List</router-link>
+        
+         <router-link v-if="!loggedin" class="ml-4 inline-block px-6 py-2 text-xs font-medium leading-6 text-center text-white uppercase transition bg-yellow-500 rounded shadow ripple hover:shadow-lg hover:bg-yellow-600 focus:outline-none" to="/signin">Sign In</router-link>
+      
+          <router-link v-if="!loggedin"
+            class="ml-4 inline-block px-6 py-2 text-xs font-medium leading-6 text-center text-white uppercase transition bg-indigo-500 rounded shadow ripple hover:shadow-lg hover:bg-indigo-600 focus:outline-none"
+            to="/signup">Sign up</router-link>
+
+            <router-link v-if="loggedin" class="ml-4 inline-block px-6 py-2 text-xs font-medium leading-6 text-center text-white uppercase transition bg-black rounded shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-black" to="/signout">Sign Out</router-link>
+       
         </div>
 
       </div>
@@ -62,11 +58,12 @@
 <script lang="ts">
   import {
     computed,
-    ref,
     defineComponent
   } from 'vue'
 
-import { useAuth } from "../utils/auth";
+  import {
+    useAuth
+  } from "../utils/auth";
 
   export default defineComponent({
     name: 'Welcome',

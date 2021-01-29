@@ -29,6 +29,7 @@ export const useApi = (endpoint: string, access_token?: string) => {
     return api.post(endpoint, payload)
       .then(res => data.value = res.data)
       .catch(e => {
+        // console.log(e.response);
         error.value = e.response
         throw e
       })
@@ -56,6 +57,21 @@ export const useApi = (endpoint: string, access_token?: string) => {
       .finally(() => loading.value = false)
   }
 
+
+  const put = (payload?: Record<string, any>) => {
+    loading.value = true
+    // error.value = undefined
+    payload._method= 'put'
+    return api.put(endpoint, payload)
+      .then(res => data.value = res.data)
+      .catch(e => {
+        error.value = e.response
+        throw e
+      })
+      .finally(() => loading.value = false)
+      
+  }
+
   // @ts-ignore
   const del = () => {
     loading.value = true
@@ -69,23 +85,24 @@ export const useApi = (endpoint: string, access_token?: string) => {
       })
       .finally(() => loading.value = false)
   }
+  
 
   const errorMessage = computed(() => {
     // console.log('?? compute', error.value);
     if (error.value) {
-      return error.value.data.data.messages
+      return error.value.data.errors
     }
   })
 
   const errorDetails = computed(() => {
-    if ( error.value && error.value.data.data.messages ) {
-      return error.value.data.data.messages
+    if ( error.value && error.value.data.errors ) {
+      return error.value.data.errors
     }
   })
 
   const errorFields = computed(() => {
-    if (error.value && Array.isArray(error.value.data.data.messages)) {
-      return (error.value.data.data.messages as string[]).reduce((acc: Record<string, any>, msg: string) => {
+    if (error.value && Array.isArray(error.value.data.errors)) {
+      return (error.value.data.errors as string[]).reduce((acc: Record<string, any>, msg: string) => {
         let [ field ] = msg.split(' ')
         // TODO: Maximal...
         if (!acc[field]) {
@@ -97,16 +114,9 @@ export const useApi = (endpoint: string, access_token?: string) => {
     }
   })
 
-  const computedClasses = (key: string) => {
-    if ( errorFields.value?.hasOwnProperty(key) ) {
-      return ['border-red-600', 'bg-red-200', 'text-red-900']
-
-    }
-    return ['border-grey-600', 'bg-white', 'text-gray-900']
-  }
-
   watch([ error ], () => {
     // If 401 Unauthorised, force user to signin
+    console.log(error.value);
     if ( error.value.status === 401 && router ) {
       const toast = useToast();
       toast.error('Please Sign In')
@@ -120,11 +130,11 @@ export const useApi = (endpoint: string, access_token?: string) => {
     error,
     get,
     post,
+    put,
     del,
     errorMessage,
     errorDetails,
     errorFields,
-    computedClasses,
   }
 }
 

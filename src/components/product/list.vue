@@ -3,11 +3,10 @@
 
     <div class="flex flex-col">
 
-        <div class="px-4 py-3 text-right">
-            <a href="#"
-                class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-pink-600 hover:bg-pink-700">
-                <router-link to="/add-product">Add</router-link>
-            </a>
+        <div class="py-3 right-0 text-right">
+                <router-link class="ml-8 inline-block px-3 py-2 text-xs font-small text-center text-pink-500 uppercase transition bg-transparent border-2 border-pink-500 rounded ripple hover:bg-pink-100 focus:outline-none waves-effect" to="/add-product">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                </router-link>
         </div>
 
         <loading v-if="loading" />
@@ -67,7 +66,7 @@
 
                                     </router-link>
 
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900"
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-900 pl-3"
                                         v-on:click="deleteProduct(product.id)">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                             xmlns="http://www.w3.org/2000/svg">

@@ -57,6 +57,11 @@
               </p>
             </div>
 
+            <div v-if="image" class="md:flex shadow-lg  mx-6 md:mx-auto my-40 h-64">
+              <img class="h-full w-full  object-cover rounded-lg rounded-r-none pb-5/6"
+                :src="image" alt="bag">
+            </div>
+          
             <div>
               <label class="block text-sm font-medium text-gray-700">
                 Product photo
@@ -73,7 +78,7 @@
                     <label for="file-upload"
                       class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                       <span>Upload a file</span>
-                      <input id="file-upload" name="file-upload" @change="onImageChange" type="file" class="sr-only">
+                      <input id="file-upload" name="file-upload" @change="onImageChange" type="file" accept="image/*" class="sr-only">
                     </label>
                     <p class="pl-1">or drag and drop</p>
                   </div>
@@ -138,25 +143,23 @@
         title: "",
         description: "",
         price: "",
-        image: undefined,
+        image: false,
       });
 
       const {
-        error,
         loading,
         post,
         errorMessage,
         errorDetails,
         errorFields,
-        computedClasses,
       } = useApiWithAuth("/api/v1/products");
 
       const router = useRouter()
 
       const addProduct = () => {
-        console.log(payload);
+        // console.log(payload);
         post(payload).then((res) => {
-          console.log(res)
+          // console.log(res)
            toast.success(res.msg);
           router.push({
             name: "ProductList"
@@ -168,6 +171,7 @@
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
+        payload.image = files[0]
         createImage(files[0]);
       };
 
@@ -186,7 +190,6 @@
         errorMessage,
         errorFields,
         errorDetails,
-        computedClasses,
         onImageChange
       };
 

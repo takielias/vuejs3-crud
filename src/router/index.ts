@@ -28,7 +28,7 @@ const routes = [
   {
     path: '/signout',
     name: 'signout',
-    component: () => import(/* webpackChunkName: "signout" */ '../components/Signout.vue'),
+    component: () => import(/* webpackChunkName: "signout" */ '../components/SignOut.vue'),
     meta: { requiresAuth: true },
   },
   {
@@ -64,28 +64,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const { authenticating, user } = useAuth()
 
-  // Not logged into a guarded route?
+  // Auth Guard
   if ( authenticating.value === false && to.meta.requiresAuth === true && !user?.value ) {
-    console.log('requires auth, redirect to login');
     const toast = useToast();
     toast.error('Please Sign In')
     next({ name: 'Signin' })
   }
-
-  // Redirect user to route if they don't have the correct subscription
-  // else if ( to.meta.requiresAuth === true && !user?.value?.subscription  && to.name!.toString().startsWith('subscribe') === false ) {
-  //   console.log('requires valid subscription, redirect to subscribe');
-  //   next({ name: 'subscribe' })
-  // }
-
-  // Logged in for an auth route
-  // else if ( (to.name == 'login' || to.name == 'register') && user!.value ) {
-  //   console.log('login or register, has a user so send home');
-
-  //   next({ name: 'home' })
-  // }
-
-  // Carry On...
   else next()
 })
 
