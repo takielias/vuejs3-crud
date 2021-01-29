@@ -7,13 +7,13 @@
     "jsx": "preserve",
     "sourceMap": true,
     "lib": ["esnext", "dom"],
-    "types": ["vite/client", "vue-sweetalert2"],
+    "types": ["vite/client"],
     "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ]
     },
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/components/home.vue", "src/components/SignIn.vue", "src/components/SignUp.vue", "src/components/signin.vue", "src/components/Home.vue", "src/components/Home.vue", "src/components/product/Edit.vue", "src/components/SignOut.vue"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

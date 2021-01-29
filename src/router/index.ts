@@ -2,7 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 
 import NotFound from "./../components/errors/NotFound.vue";
 
-import { useAuth } from '../utils/auth'
+import { useAuth } from './../utils/auth'
 
 import { useToast } from "vue-toastification";
 
