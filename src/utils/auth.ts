@@ -1,6 +1,6 @@
 // import api from './api'
-import { computed, inject, reactive, toRefs, watch } from 'vue'
-import { useApi, useApiWithAuth } from './api'
+import { reactive, toRefs, watch } from 'vue'
+import { useApi } from './api'
 
 const AUTH_KEY = 'vue3_token'
 export const AUTH_TOKEN = 'access_token'

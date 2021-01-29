@@ -116,7 +116,7 @@ export const useApi = (endpoint: string, access_token?: string) => {
 
   watch([ error ], () => {
     // If 401 Unauthorised, force user to signin
-    console.log(error.value);
+    // console.log(error.value);
     if ( error.value.status === 401 && router ) {
       const toast = useToast();
       toast.error('Please Sign In')
