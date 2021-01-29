@@ -1,7 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
 
-import NotFound from "./../components/errors/NotFound.vue";
-
 import { useAuth } from './../utils/auth'
 
 import { useToast } from "vue-toastification";
@@ -43,7 +41,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "ProductList" */ './../components/product/List.vue'),
     meta: { requiresAuth: true },
   },
-
   {
     path: '/product/:id',
     name: 'product.view',
@@ -52,7 +49,8 @@ const routes = [
   },
   {
     path: "/:catchAll(.*)",
-    component: NotFound,
+    component: () => import(/* webpackChunkName: "NotFound" */ './../components/errors/NotFound.vue'),
+    
   },
 ];
 
