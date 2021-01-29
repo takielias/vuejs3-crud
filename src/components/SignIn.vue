@@ -1,5 +1,7 @@
 <template>
 
+  <loading v-if="loading" />
+
   <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div>
@@ -69,6 +71,9 @@
   // @ts-ignore
   import FormValidation from './FormValidation.vue'
 
+  import { useToast } from "vue-toastification";
+
+  
   interface LoginPayload {
     email: string;
     password: string;
@@ -80,6 +85,8 @@
       FormValidation,
     },
     setup() {
+
+     const toast = useToast();
 
       const {
         loading,
@@ -106,6 +113,7 @@
           // console.log(res);
           if (res) {
             setUser(res, payload.rememberMe);
+            toast.success(res.msg);
             router.push({
               name: "Home"
             });

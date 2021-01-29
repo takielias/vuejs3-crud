@@ -12,7 +12,7 @@ export const useApiWithAuth = (endpoint: string) => {
 export const useApi = (endpoint: string, access_token?: string) => {
   const router = useRouter()
   const api = axios.create({
-    baseURL: process.env.VUE_APP_API || 'https://vue3api.ebuz.xyz/',
+    baseURL: process.env.VUE_APP_API || 'https://vue3api.ebuz.xyz',
     headers: {
       Authorization: access_token ? `Bearer ${access_token}` : undefined,
     }
