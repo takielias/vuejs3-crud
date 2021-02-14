@@ -1,2 +1,1 @@
-# vuejs3-crud
-Vuejs 3 CRUD
+Laravel as Back End API Framework and vuejs 3 (Composition API) with TypeScript for Front End Framework.
